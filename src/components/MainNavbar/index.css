@@ -1,0 +1,28 @@
+.my-navbar-container {
+  background-color: #F1DEC9;
+  padding: 0 12em;
+}
+
+.nav-right {
+  display: flex;
+  justify-content: end;
+}
+
+.nav-left {
+  display: flex;
+  gap: 2em;
+}
+
+.btn-navbar {
+  background-color: #978673;
+  color: white;
+  outline: none;
+  font-weight: 700;
+  font-size: .8rem;
+}
+
+.btn-navbar:hover {
+  color: white !important;
+  overflow: hidden;
+  transform: scale(1.2);
+}

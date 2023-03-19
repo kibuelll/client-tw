@@ -1,0 +1,38 @@
+.profile-section {
+  padding: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-container {
+  display: flex;
+  padding: 1em;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  background-color: #C8B6A6;
+  width: 30%;
+}
+
+
+.avatar-container {
+  width: 10rem;
+  height: 10rem;
+  padding: 1.5em;
+  background: url("https://api.multiavatar.com/Binx Bond.png");
+  background-size: cover;
+}
+
+
+.detail-profile {
+  margin: .5em !important;
+  padding: 0;
+}
+
+.avatar-icon {
+  width: 7rem;
+  height: 7rem;
+  margin: 0;
+}
