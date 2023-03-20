@@ -1,7 +1,3 @@
-.my-table {
-  width: 80%;
-}
-
 .ant-table-thead tr .ant-table-cell,
 .ant-table-row .ant-table-cell {
   text-align: center !important;
@@ -17,6 +13,14 @@
 .row-table {
   background-color: #F1DEC9 !important;
   /* pointer-events: none; */
+}
+
+.row-table:hover {
+  background-color: #eee2d4 !important;
+}
+
+.form-table {
+  min-width: 80% !important;
 }
 
 .action-container {
@@ -69,4 +73,10 @@
     transform: scale(1);
     /* End state */
   }
+}
+
+.editable-row .ant-form-item-explain {
+  position: absolute;
+  top: 100%;
+  font-size: 12px;
 }

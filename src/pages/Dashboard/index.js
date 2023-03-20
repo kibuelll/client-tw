@@ -23,7 +23,6 @@ function Dashboard() {
   });
 
   useEffect(() => {
-
     dispatch(fetchProducts())
       .then(() => {
         setLoading(false);
@@ -31,11 +30,15 @@ function Dashboard() {
       .catch((err) => {
         console.log(err);
       });
-  }, [socket]);
+
+      return () => {
+        socket.disconnect()
+      }
+  }, []);
 
   return (
     <div className="container">
-      {!loading ? <TableSensor data={sensors} /> : <h1>LOADING</h1>}
+      {!loading ? <TableSensor sensors={sensors} dispatch={dispatch}/> : <h1>LOADING</h1>}
     </div>
   );
 }

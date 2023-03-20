@@ -1,16 +1,49 @@
-import { Table, Row, Col, Button } from "antd";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { deleteProduct, fetchProducts } from "../../actions/productAction";
+import { useEffect, useState } from "react";
+import { Table, Button, Form, Typography, Popconfirm } from "antd";
+import EditableCell from "../TableCell";
+// import { useDispatch } from 'react-redux';
+import {
+  deleteProduct,
+  fetchProducts,
+  updateProduct,
+} from "../../actions/productAction";
 import "./index.css";
 
-const TableSensor = ({ data }) => {
-  const dispatch = useDispatch();
+const TableSensor = ({ sensors, dispatch }) => {
+  const [form] = Form.useForm();
+  const [data, setData] = useState(sensors);
+  const [editingKey, setEditingKey] = useState("");
+  const isEditing = (record) => +record.id === editingKey;
+  const edit = (record) => {
+    form.setFieldsValue({
+      temperature: "",
+      pressure: "",
+      humidity: "",
+      ...record,
+    });
+    setEditingKey(record.id);
+  };
 
-  const editable = (e) => {
-    console.log(e)
-    e.innerHTML = <input placeholder="edit"/>
-  } 
+  const cancel = () => {
+    setEditingKey("");
+  };
+
+  const save = async (record) => {
+    try {
+      dispatch(
+        updateProduct(record.id, {
+          ...record,
+        })
+      )
+        .then((data) => {
+          dispatch(fetchProducts());
+          console.log(data);
+        })
+        .catch((err) => console.log(err));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleDelete = (id) => {
     dispatch(deleteProduct(id))
@@ -22,25 +55,25 @@ const TableSensor = ({ data }) => {
         console.log(err);
       });
   };
+
   const columns = [
     {
       title: "Temperature",
       dataIndex: "temperature",
       key: "temperature",
-      editable :true,
-      render : (temperature) => {
-        return <span onFocus={editable}>{temperature}</span>;
-      }
+      editable: true,
     },
     {
       title: "Pressure",
       dataIndex: "pressure",
       key: "pressure",
+      editable: true,
     },
     {
       title: "Humidity",
       dataIndex: "humidity",
       key: "humidity",
+      editable: true,
     },
     {
       title: "Time",
@@ -57,13 +90,36 @@ const TableSensor = ({ data }) => {
       title: "Action",
       dataIndex: "id",
       key: "id",
-      render: (id) => {
-        return (
+      render: (id, record) => {
+        const editable = isEditing(record);
+        return editable ? (
+          <span>
+            <Typography.Link
+              onClick={() => {
+                save(record);
+              }}
+              style={{
+                marginRight: 8,
+              }}
+            >
+              Save
+            </Typography.Link>
+            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+              <a>Cancel</a>
+            </Popconfirm>
+          </span>
+        ) : (
           <div className="action-container">
             <Button className="btn-action-view">
-              <Link to={`/sensor/${id}`} className="btn-action-view">
-                View
-              </Link>
+              <Typography.Link
+                disabled={editingKey !== ""}
+                onClick={() => {
+                  edit(record);
+                }}
+                className="btn-action-view"
+              >
+                Edit
+              </Typography.Link>
             </Button>
             <Button
               onClick={() => {
@@ -79,15 +135,51 @@ const TableSensor = ({ data }) => {
     },
   ];
 
+  const mergedColumns = columns.map((col) => {
+    if (!col.editable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: (record) => ({
+        record,
+        inputType:
+          col.dataIndex === "temperature" ||
+          col.dataIndex === "humidity" ||
+          col.dataIndex === "pressure"
+            ? "number"
+            : "text",
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record),
+      }),
+    };
+  });
+
+  useEffect(() => {
+    setData(sensors);
+  }, [sensors]);
+
   return (
-    <Table
-      dataSource={data}
-      columns={columns}
-      rowKey={(record) => record.id}
-      rowClassName="row-table"
-      className="my-table"
-      pagination={{ position: ["bottomCenter"] }}
-    />
+    <Form form={form} component={false}>
+      <Table
+        className="form-table"
+        components={{
+          body: {
+            cell: EditableCell,
+          },
+        }}
+        bordered
+        dataSource={data}
+        rowKey={(record) => record.id}
+        columns={mergedColumns}
+        rowClassName="editable-row"
+        pagination={{
+          onChange: cancel,
+          position: ["bottomCenter"],
+        }}
+      />
+    </Form>
   );
 };
 

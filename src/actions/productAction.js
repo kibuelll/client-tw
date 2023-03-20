@@ -65,4 +65,29 @@ export const fetchOneProduct = (id) => {
       throw error;
     }
   };
+
 };
+
+export const updateProduct = (id,payload) => {
+ return async () => {
+  try {
+    const response = await fetch(baseUrl + `/${+id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        access_token : localStorage.access_token
+      },
+      body: JSON.stringify(payload)
+    })
+
+    if(!response.ok) {
+      throw await response.json();
+    }
+
+    const data = await response.json();
+    return data
+  } catch (error) {
+    throw error;
+  }
+ } 
+}
