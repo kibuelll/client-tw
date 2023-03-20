@@ -1,3 +1,7 @@
+.my-table {
+  width: 80%;
+}
+
 .ant-table-thead tr .ant-table-cell,
 .ant-table-row .ant-table-cell {
   text-align: center !important;
@@ -5,9 +9,64 @@
 }
 
 .ant-table-thead tr .ant-table-cell {
-  background-color: #F1DEC9 !important;
+  background-color: #eec79d !important;
+  font-weight: 700 !important;
+  color: black;
 }
 
-.my-table {
-  width: 80%;
+.row-table {
+  background-color: #F1DEC9 !important;
+  /* pointer-events: none; */
+}
+
+.action-container {
+  display: flex;
+  justify-content: center;
+  gap: 1.5em;
+}
+
+.btn-action-view {
+  text-decoration: none;
+  outline: none !important;
+  background-color: #cfc0ae;
+  color: #fff;
+}
+
+.btn-action-view:hover,
+.btn-actoin-view:focus {
+  text-decoration: none;
+  outline: none !important;
+  background-color: #daaf7c;
+  overflow: none;
+  color: #fff !important;
+  border: none;
+  animation: bounce 0.5s;
+}
+
+.btn-action-delete {
+  outline: none !important;
+  background-color: #e0c8ab;
+}
+
+.btn-action-delete:hover {
+  outline: none !important;
+  background-color: #e0c8ab;
+  animation: bounce 0.5s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+    /* Initial state */
+  }
+
+  50% {
+    transform: scale(1.1);
+    /* Middle state */
+  }
+
+  100% {
+    transform: scale(1);
+    /* End state */
+  }
 }
